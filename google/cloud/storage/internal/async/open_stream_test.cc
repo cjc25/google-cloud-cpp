@@ -38,6 +38,7 @@ TEST(OpenStream, CancelBlocksAllRequest) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
   EXPECT_CALL(*mock, Start).Times(0);
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).Times(0);
   EXPECT_CALL(*mock, Write).Times(0);
   EXPECT_CALL(*mock, Read).Times(0);
   EXPECT_CALL(*mock, Cancel).Times(1);
@@ -51,6 +52,7 @@ TEST(OpenStream, CancelBlocksAllRequest) {
   actual->Cancel();
 
   EXPECT_FALSE(actual->Start().get());
+  EXPECT_FALSE(actual->StartWithCorkedInitialMetadata().get());
   EXPECT_FALSE(actual->Write({}).get());
   EXPECT_FALSE(actual->Read().get().has_value());
 

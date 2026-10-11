@@ -40,8 +40,9 @@ std::string RequestParams(
 /**
  * Performs a single attempt to open a bidi-streaming read RPC.
  *
- * Before we can use a bidi-streaming read RPC we must call `Start()`, and
- * send the initial message via `Write()`.
+ * Before we can use a bidi-streaming read RPC we must call
+ * `StartWithCorkedInitialMetadata()`, and send the initial message via
+ * `Write()`.
  *
  * Using C++20 coroutines we would write this as:
  *
@@ -64,7 +65,7 @@ std::string RequestParams(
  *   context->AddMetadata("x-goog-request-params", RequestParams(request));
  *   auto rpc = stub->AsyncBidiReadObject(
  *       cq, std::move(context), std::move(options));
- *   auto start = co_await rpc->Start();
+ *   auto start = co_await rpc->StartWithCorkedInitialMetadata();
  *   if (!start) co_return co_await rpc->Finish();
  *   auto write = co_await rpc->Write(request, grpc::WriteOptions{});
  *   if (!write) co_return co_await rpc->Finish();

@@ -64,6 +64,7 @@ class OpenStream : public std::enable_shared_from_this<OpenStream> {
 
   void Cancel();
   future<bool> Start();
+  future<bool> StartWithCorkedInitialMetadata();
   future<bool> Write(google::storage::v2::BidiReadObjectRequest const& request);
   future<ReadType> Read();
   future<Status> Finish();

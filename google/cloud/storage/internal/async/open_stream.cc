@@ -34,6 +34,11 @@ future<bool> OpenStream::Start() {
   return rpc_->Start();
 }
 
+future<bool> OpenStream::StartWithCorkedInitialMetadata() {
+  if (cancel_) return make_ready_future(false);
+  return rpc_->StartWithCorkedInitialMetadata();
+}
+
 future<bool> OpenStream::Write(
     google::storage::v2::BidiReadObjectRequest const& request) {
   if (cancel_) return make_ready_future(false);
