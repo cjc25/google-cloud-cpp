@@ -78,7 +78,7 @@ std::shared_ptr<storage::AsyncConnection> MakeTestConnection(
 std::unique_ptr<MockAsyncBidiWriteObjectStream> MakeCommonAppendStream(
     AsyncSequencer<bool>& sequencer, std::int64_t persisted_size) {
   auto stream = std::make_unique<MockAsyncBidiWriteObjectStream>();
-  EXPECT_CALL(*stream, Start).WillOnce([&] {
+  EXPECT_CALL(*stream, StartWithCorkedInitialMetadata).WillOnce([&] {
     return sequencer.PushBack("Start");
   });
 
@@ -228,7 +228,7 @@ std::unique_ptr<AsyncBidiWriteObjectStream> MakeSuccessfulAppendStream(
 std::unique_ptr<AsyncBidiWriteObjectStream> MakeErrorBidiWriteStream(
     AsyncSequencer<bool>& sequencer, Status const& status) {
   auto stream = std::make_unique<MockAsyncBidiWriteObjectStream>();
-  EXPECT_CALL(*stream, Start).WillOnce([&] {
+  EXPECT_CALL(*stream, StartWithCorkedInitialMetadata).WillOnce([&] {
     return sequencer.PushBack("Start");
   });
   EXPECT_CALL(*stream, Finish).WillOnce([&, status] {

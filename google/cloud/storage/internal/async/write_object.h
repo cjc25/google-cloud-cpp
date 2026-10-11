@@ -35,8 +35,9 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 /**
  * Performs a single attempt to open a bidi-streaming write RPC.
  *
- * Before we can use a bidi-streaming write RPC we must call `Start()`, and
- * then call `Read()` to check the RPC start was successful.
+ * Before we can use a bidi-streaming write RPC we must call
+ * `StartWithCorkedInitialMetadata()`, send the initial message via `Write()`,
+ * and then call `Read()` to check the RPC start was successful.
  *
  * Using C++20 coroutines we would write this as:
  *
@@ -49,8 +50,10 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
  * future<StatusOr<google::storage::v2::BidiWriteObjectResponse>> Call(
  *     StreamingRpc rpc,
  *     google::storage::v2::BidiWriteObjectRequest request) {
- *   auto start = co_await rpc->Start();
+ *   auto start = co_await rpc->StartWithCorkedInitialMetadata();
  *   if (!start) co_return co_await rpc->Finish();
+ *   auto write = co_await rpc->Write(request, grpc::WriteOptions{});
+ *   if (!write) co_return co_await rpc->Finish();
  *   auto read = co_await rpc->Read();
  *   if (!read) co_return co_await rpc->Finish();
  *   co_return std::move(*read);

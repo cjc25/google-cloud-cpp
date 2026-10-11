@@ -435,7 +435,7 @@ TEST_F(AsyncConnectionImplTest, AppendableObjectUploadToken) {
 
         auto stream = std::make_unique<::google::cloud::storage::testing::
                                            MockAsyncBidiWriteObjectStream>();
-        EXPECT_CALL(*stream, Start).WillOnce([&] {
+        EXPECT_CALL(*stream, StartWithCorkedInitialMetadata).WillOnce([&] {
           return sequencer.PushBack("Start");
         });
         EXPECT_CALL(*stream, Finish).WillOnce([&] {

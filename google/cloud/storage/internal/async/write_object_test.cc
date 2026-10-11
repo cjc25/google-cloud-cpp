@@ -60,7 +60,7 @@ TEST(WriteObjectTest, Basic) {
 
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
 
@@ -122,7 +122,7 @@ TEST(WriteObject, BasicWriteHandle) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
 
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
   EXPECT_CALL(*mock, Write)
@@ -163,7 +163,7 @@ TEST(WriteObject, StartError) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
 
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
   EXPECT_CALL(*mock, Finish).WillOnce([&sequencer]() {
@@ -189,7 +189,7 @@ TEST(WriteObject, WriteError) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
 
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
   EXPECT_CALL(*mock, Write).WillOnce([&sequencer]() {
@@ -221,7 +221,7 @@ TEST(WriteObject, ReadError) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
 
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
   EXPECT_CALL(*mock, Write).WillOnce([&sequencer]() {
@@ -261,7 +261,7 @@ TEST(WriteObject, UnexpectedFinish) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_unique<MockStream>();
 
-  EXPECT_CALL(*mock, Start).WillOnce([&sequencer]() {
+  EXPECT_CALL(*mock, StartWithCorkedInitialMetadata).WillOnce([&sequencer]() {
     return sequencer.PushBack("Start").then([](auto f) { return f.get(); });
   });
   EXPECT_CALL(*mock, Write).WillOnce([&sequencer]() {

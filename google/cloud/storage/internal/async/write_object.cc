@@ -28,7 +28,7 @@ WriteObject::WriteObject(std::unique_ptr<StreamingRpc> rpc,
 
 future<StatusOr<WriteObject::WriteResult>> WriteObject::Call() {
   auto future = promise_.get_future();
-  rpc_->Start().then([w = WeakFromThis()](auto f) {
+  rpc_->StartWithCorkedInitialMetadata().then([w = WeakFromThis()](auto f) {
     if (auto self = w.lock()) self->OnStart(f.get());
   });
   return future;
